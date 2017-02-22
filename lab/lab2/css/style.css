@@ -29,6 +29,20 @@ p.main {
 
 .legend {
   position: absolute;
-  background-color: #fff;
+  right: 0;
+  background: rgba(200, 200, 200, 0.4);
   z-index: 2000;
+  list-style: none;
+  width: 200px
+}
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+.legend .mon { background-color: #00ff00; }
+.legend .tue { background-color: #0000ff; }
+.legend .wed { background-color: #ff00ff; }
+.legend .thu { background-color: #00ffff; }
+.legend .fri { background-color: #ffff00; }
+
+.close {
+  position: absolute;
+  left: 375px;
 }

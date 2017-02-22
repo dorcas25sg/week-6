@@ -26,12 +26,25 @@
         <p>Please be sure to leave your garbage outside on <span class="day-of-week">
         Day of Week</span>. If this week is a federal holiday, leave your
         garbage outside on the following day.</p>
+        <br>
+        <!-- Added for Task 6 -->
+        <p>Leaflet ID is <span id="leafid">ID HERE</span> </p>
       </div>
     </div>
     <!-- Map -->
     <div id="map" class="map"></div>
     <!-- Legend -->
-    <div class="legend"></div>
+    <div class="legend">
+      <ul class="legend">
+          <li><span class="mon"></span> Monday</li>
+          <li><span class="tue"></span> Tuesday</li>
+          <li><span class="wed"></span> Wednesday</li>
+          <li><span class="thu"></span> Thursday</li>
+          <li><span class="fri"></span> Friday</li>
+      </ul>
+    </div>
+    <!-- Task 8 -->
+      <button class="close">X</button>
     <!-- Javascript Imports -->
     <script src="js/jquery-2.2.0.js"></script>
     <script src="js/underscore.js"></script>

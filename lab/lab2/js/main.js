@@ -95,6 +95,8 @@ to each box. Position the legend on top of the map (hint: you can use absolute
 positioning, which is the technique used to position the sidebar and map on this
 page).
 
+Note: I am putting the legend at the top right hand corner of the map
+
 ## Task 6 (Stretch goal)
 
 Let's associate the leaflet ID (we can use this to look up a leaflet layer) with
@@ -123,11 +125,23 @@ of the application to report this information.
 
 ===================== */
 
-var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson";
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  if (feature["properties"]["COLLDAY"]==="MON") {
+    return {fillColor: '#00ff00'};
+  }  else if (feature["properties"]["COLLDAY"]==="TUE") {
+    return {fillColor: '#0000ff'};
+  }  else if (feature["properties"]["COLLDAY"]==="WED") {
+    return {fillColor: '#ff00ff'};
+  }  else if (feature["properties"]["COLLDAY"]==="THU") {
+    return {fillColor: '#00ffff'};
+  }  else if (feature["properties"]["COLLDAY"]==="FRI") {
+    return {fillColor: '#ffff00'};
+  } else {
+    return {fillColor: '#ff0000'};
+  }
 };
 
 var showResults = function() {
@@ -143,22 +157,70 @@ var showResults = function() {
   $('#results').show();
 };
 
+var daysCombined = [] //task 9
 
 var eachFeatureFunction = function(layer) {
+  daysCombined.push(layer["feature"]["properties"]["COLLDAY"]); // task 9
   layer.on('click', function (event) {
     /* =====================
     The following code will run every time a layer on the map is clicked.
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
+    if ($(layer["feature"]["properties"]).attr( "COLLDAY" ) ==="MON") {
+      $( ".day-of-week" ).replaceWith("Monday");
+    }  else if ($(layer["feature"]["properties"]).attr( "COLLDAY" ) ==="TUE") {
+      $( ".day-of-week" ).replaceWith("Tuesday");
+    }  else if ($(layer["feature"]["properties"]).attr( "COLLDAY" ) ==="WED") {
+      $( ".day-of-week" ).replaceWith("Wednesday");
+    }  else if ($(layer["feature"]["properties"]).attr( "COLLDAY" ) ==="THU") {
+      $( ".day-of-week" ).replaceWith("Thursday");
+    }  else if ($(layer["feature"]["properties"]).attr( "COLLDAY" ) ==="FRI") {
+      $( ".day-of-week" ).replaceWith("Friday");
+    } else {
+      $( ".day-of-week" ).replaceWith("NA");
+    }
     console.log(layer.feature);
+
+    //task 6
+    var id = event.target._leaflet_id;
+    $( "#leafid" ).replaceWith(id);
+
+    //task 7
+    var bounds = event.target.getBounds();
+    map.fitBounds(bounds);
+
     showResults();
   });
 };
 
 var myFilter = function(feature) {
+  if (feature["properties"]["COLLDAY"]===" ") {
+    return false;
+  } else {
   return true;
+}
 };
+
+//Task 8
+var closeResults = function() {
+  /* =====================
+  This function uses some jQuery methods that may be new. $(element).hide()
+  will add the CSS "display: none" to the element, effectively removing it
+  from the page. $(element).show() removes "display: none" from an element,
+  returning it to the page. You don't need to change this part.
+  ===================== */
+  // => <div id="results">
+  $('#results').hide();
+  // => <div id="intro" css="display: none">
+  $('#intro').show();
+};
+
+$( ".close" ).click(function() {
+  closeResults();
+  map.fitBounds(featureGroup.getBounds());
+});
+
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
@@ -172,3 +234,8 @@ $(document).ready(function() {
     featureGroup.eachLayer(eachFeatureFunction);
   });
 });
+
+//task 9 can't solve. How do i count highest occurence within an array (in this case my array is called 'daysCombined')
+console.log(daysCombined);
+var mostCommon = _.chain(daysCombined).countBy().pairs().max(_.last).head().value();
+console.log(mostCommon);
